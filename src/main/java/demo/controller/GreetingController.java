@@ -3,6 +3,7 @@ package demo.controller;
 import demo.entity.Greeting;
 import demo.entity.ListBook;
 import demo.entity.Parent;
+import demo.entity.Response;
 import demo.hibernate.DatabaseProcess;
 import demo.hibernate.entity.Book;
 import demo.hibernate.entity.User;
@@ -37,6 +38,28 @@ public class GreetingController {
                 String.format(template, name)));
         tem.setLst(lst);
         return tem;
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Response register(@RequestParam(value = "firstName") String firstName,
+                             @RequestParam(value = "lastName") String lastName,
+                             @RequestParam(value = "username") String username,
+                             @RequestParam(value = "password") String password) {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUsername(username);
+        user.setPassword(password);
+        boolean tem = DatabaseProcess.InsertOrUpdateUser(user);
+        Response response = new Response();
+        if (tem) {
+            response.setCode("00");
+            response.setMessage("Success");
+        } else {
+            response.setCode("01");
+            response.setMessage("fail");
+        }
+        return response;
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)

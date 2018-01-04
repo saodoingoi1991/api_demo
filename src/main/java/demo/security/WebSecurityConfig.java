@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/resources/static/img_book/**", "/fonts/**","/image");
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/resources/static/img_book/**", "/fonts/**", "/image");
         System.out.printf("configure WebSecurity");
     }
 
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/css/**", "/js/**", "/loggedout").permitAll()
+        http.authorizeRequests().antMatchers("/css/**", "/js/**", "/loggedout", "/register").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/api/tasks");

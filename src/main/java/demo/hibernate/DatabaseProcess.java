@@ -62,16 +62,33 @@ public class DatabaseProcess {
         Session session = factory.openSession();
         session.getTransaction().begin();
         try {
+            if (user.getId() == null || user.getId() <= 0) {
+                int id = getSequenseCommonCategory(session, "USER_SEQ");
+                user.setId(id);
+            }
             session.saveOrUpdate(user);
             session.getTransaction().commit();
             return true;
         } catch (Exception e) {
             session.getTransaction().rollback();
-            log.error(" insertConfigCategory :" + e);
+            log.error(" insertConfigCategory :", e);
         } finally {
             session.close();
         }
         return false;
+    }
+
+    public static int getSequenseCommonCategory(Session session, String sequence) {
+        String sql = " SELECT " + sequence + ".nextval FROM dual ";
+        try {
+            Query query = session.createSQLQuery(sql);
+            int key = Integer.parseInt(query.uniqueResult().toString());
+            return key;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getSeqence: ", e);
+        }
+        return 0;
     }
 
     public static List<Book> getAllBook(String title) {
